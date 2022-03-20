@@ -1,0 +1,34 @@
+
+SUBMODS = comm test
+
+CLEANTARGET = clean
+
+SUBMODSCLEAN = comm.clean test.clean
+
+INSTALLTARGET = install
+
+SUBMODSINSTALL = comm.install test.install
+
+.PHONY: all $(INSTALLTARGET) $(CLEANTARGET) $(SUBMODS) 
+
+all: $(SUBMODS)
+
+$(INSTALLTARGET): $(SUBMODSINSTALL)
+
+$(CLEANTARGET): $(SUBMODSCLEAN)
+	
+$(SUBMODS):
+	@echo "Begin to make sub module: '$@' ......"
+	@cd $@ && $(MAKE);
+	@echo "Finish to  make sub module: '$@'" 
+
+$(SUBMODSINSTALL):
+	@echo "Begin to install sub module: '$(patsubst %.$(INSTALLTARGET), %, $@)' ......"
+	@cd $(patsubst %.$(INSTALLTARGET), %, $@)  && make $(INSTALLTARGET);
+	@echo "Finish to  clean sub module: '$(patsubst %.$(INSTALLTARGET), %, $@)'"
+
+$(SUBMODSCLEAN): 
+	@echo "Begin to clean sub module: '$(patsubst %.$(CLEANTARGET), %, $@)' ......"
+	@cd $(patsubst %.$(CLEANTARGET), %, $@)  && make $(CLEANTARGET);
+	@echo "Finish to  clean sub module: '$(patsubst %.$(CLEANTARGET), %, $@)'" 
+

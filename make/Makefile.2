@@ -1,0 +1,4 @@
+hello: hello.o
+	$(CXX) -g -o $@ $^ -lpthread
+hello.o: hello.cpp
+	$(CXX) -g -c -o $@ $<
